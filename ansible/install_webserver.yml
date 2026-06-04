@@ -1,0 +1,47 @@
+- name: Paigalda Apache2 ja PHP AlmaServer
+  hosts: almaserver
+  become: yes
+
+
+  tasks:
+    - name: Paigalda EPEL repo (AlmaLinux vajab)
+      ansible.builtin.dnf:
+        name: epel-release
+        state: present
+
+
+    - name: Paigalda Apache (httpd) ja PHP
+      ansible.builtin.dnf:
+        name:
+          - httpd
+          - php
+          - php-mysqlnd
+          - php-mbstring
+          - php-xml
+          - php-gd
+          - mod_ssl
+          - openssl
+        state: present
+
+
+    - name: Käivita ja luba Apache
+      ansible.builtin.systemd:
+        name: httpd
+        state: started
+        enabled: yes
+
+
+    - name: Ava firewall HTTP (80)
+      ansible.builtin.firewalld:
+        service: http
+        permanent: yes
+        state: enabled
+        immediate: yes
+
+
+    - name: Ava firewall HTTPS (443)
+      ansible.builtin.firewalld:
+        service: https
+        permanent: yes
+        state: enabled
+        immediate: yes

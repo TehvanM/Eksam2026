@@ -1,0 +1,28 @@
+- name: Loo kasutaja hkhk ja lisa sudo gruppi
+  hosts: all
+  become: yes
+
+
+  tasks:
+    - name: Loo kasutaja hkhk
+      ansible.builtin.user:
+        name: hkhk
+        state: present
+        shell: /bin/bash
+        create_home: yes
+
+
+    - name: Lisa hkhk sudo gruppi (Alma)
+      ansible.builtin.user:
+        name: hkhk
+        groups: wheel
+        append: yes
+      when: ansible_os_family == 'RedHat'
+
+
+    - name: Lisa hkhk sudo gruppi (Debian)
+      ansible.builtin.user:
+        name: hkhk
+        groups: sudo
+        append: yes
+      when: ansible_os_family == 'Debian'

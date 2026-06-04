@@ -1,0 +1,62 @@
+- name: Paigalda MariaDB ja phpMyAdmin DebianServer
+  hosts: debianserver
+  become: yes
+
+
+  vars:
+    db_root_pass: 'Passw0rd'
+    db_name: 'kasutajatugidb'
+    db_user: 'ktadmin'
+    db_user_pass: 'Passw0rd'
+
+
+  tasks:
+    - name: Uuenda apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+
+    - name: Paigalda MariaDB server
+      ansible.builtin.apt:
+        name:
+          - mariadb-server
+          - mariadb-client
+          - python3-pymysql
+        state: present
+
+
+    - name: Käivita ja luba MariaDB
+      ansible.builtin.systemd:
+        name: mariadb
+        state: started
+        enabled: yes
+
+
+    - name: Muuda MariaDB root parool
+      ansible.builtin.mysql_user:
+        name: root
+        password: '{{ db_root_pass }}'
+        host_all: yes
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+
+    - name: Eemalda anonüümsed kasutajad
+      community.mysql.mysql_user:
+        name: ''
+        host_all: yes
+        state: absent
+        login_user: root
+        login_password: '{{ db_root_pass }}'
+
+
+    - name: Keela kaugühendus root kasutajale
+      community.mysql.mysql_query:
+        query: "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost','127.0.0.1','::1')"
+        login_user: root
+        login_password: '{{ db_root_pass }}'
+
+
+    - name: Paigalda phpMyAdmin
+      ansible.builtin.apt:
+        name: phpmyadmin
+        state: present
