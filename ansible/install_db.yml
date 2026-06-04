@@ -5,7 +5,7 @@
 
   vars:
     db_root_pass: 'Passw0rd'
-    db_name: 'kasutajatugidb'
+    db_name: 'kasutajatugi_db'
     db_user: 'ktadmin'
     db_user_pass: 'Passw0rd'
 
