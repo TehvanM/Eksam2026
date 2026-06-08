@@ -1,0 +1,219 @@
+RUUTER R1
+
+enable
+configure terminal
+hostname R1
+username admin privilege 15 secret Passw0rd!
+enable secret Passw0rd!
+ip domain-name cisco.local
+crypto key generate rsa
+1024
+ip ssh version 2
+line console 0
+login local
+password Passw0rd!
+exit
+line vty 0 4
+login local
+transport input ssh
+password Passw0rd!
+exit
+banner motd #Autoriseerimata sisselogimine on keelatud!#
+interface GigabitEthernet0/0
+ip address 192.168.5.1 255.255.255.128
+no shutdown
+exit
+interface Serial0/0/0
+ip address 201.10.23.1 255.255.255.252
+clock rate 64000
+no shutdown
+exit
+interface Serial0/0/1
+ip address 201.10.23.5 255.255.255.252
+clock rate 64000
+no shutdown
+exit
+router ospf 1
+network 192.168.5.0 0.0.0.127 area 0
+network 201.10.23.0 0.0.0.3 area 0
+network 201.10.23.4 0.0.0.3 area 0
+passive-interface GigabitEthernet0/0
+exit
+ip dhcp excluded-address 192.168.5.1 192.168.5.10
+ip dhcp pool LAN
+network 192.168.5.0 255.255.255.128
+default-router 192.168.5.1
+dns-server 1.1.1.1
+domain-name too.net
+exit
+end
+write memory
+
+RUUTER R2
+
+enable
+configure terminal
+hostname R2
+username admin privilege 15 secret Passw0rd!
+enable secret Passw0rd!
+ip domain-name cisco.local
+crypto key generate rsa
+1024
+ip ssh version 2
+line console 0
+login local
+password Passw0rd!
+exit
+line vty 0 4
+login local
+transport input ssh
+password Passw0rd!
+exit
+banner motd #Autoriseerimata sisselogimine on keelatud!#
+interface GigabitEthernet0/0
+ip address 192.168.6.1 255.255.255.128
+no shutdown
+exit
+interface Serial0/0/0
+ip address 194.25.10.45 255.255.255.252
+no shutdown
+exit
+interface Serial0/0/1
+ip address 194.25.10.42 255.255.255.252
+no shutdown
+exit
+router ospf 1
+network 192.168.6.0 0.0.0.127 area 0
+network 194.25.10.40 0.0.0.3 area 0
+network 194.25.10.44 0.0.0.3 area 0
+passive-interface GigabitEthernet0/0
+exit
+ip dhcp excluded-address 192.168.6.1 192.168.6.10
+ip dhcp pool LAN1
+network 192.168.6.0 255.255.255.128
+default-router 192.168.6.1
+dns-server 1.1.1.1
+domain-name too1.net
+exit
+end
+write memory
+
+RUUTER R3
+
+enable
+configure terminal
+hostname R3
+username admin privilege 15 secret Passw0rd!
+enable secret Passw0rd!
+ip domain-name cisco.local
+crypto key generate rsa
+1024
+ip ssh version 2
+line console 0
+login local
+password Passw0rd!
+exit
+line vty 0 4
+login local
+transport input ssh
+password Passw0rd!
+exit
+banner motd #Autoriseerimata sisselogimine on keelatud!#
+interface Serial0/0/0
+ip address 201.10.23.2 255.255.255.252
+no shutdown
+exit
+interface Serial0/0/1
+ip address 194.25.10.41 255.255.255.252
+no shutdown
+exit
+router ospf 1
+network 201.10.23.0 0.0.0.3 area 0
+network 194.25.10.40 0.0.0.3 area 0
+exit
+end
+write memory
+
+RUUTER R4
+
+enable
+configure terminal
+hostname R4
+username admin privilege 15 secret Passw0rd!
+enable secret Passw0rd!
+ip domain-name cisco.local
+crypto key generate rsa
+1024
+ip ssh version 2
+line console 0
+login local
+password Passw0rd!
+exit
+line vty 0 4
+login local
+transport input ssh
+password Passw0rd!
+exit
+banner motd #Autoriseerimata sisselogimine on keelatud!#
+interface Serial0/0/1
+ip address 201.10.23.6 255.255.255.252
+no shutdown
+exit
+interface Serial0/0/0
+ip address 194.25.10.46 255.255.255.252
+no shutdown
+exit
+router ospf 1
+network 201.10.23.4 0.0.0.3 area 0
+network 194.25.10.44 0.0.0.3 area 0
+exit
+end
+write memory
+
+SWITCH S1
+
+enable
+configure terminal
+hostname S1
+username admin privilege 15 secret Passw0rd!
+enable secret Passw0rd!
+ip domain-name cisco.local
+crypto key generate rsa
+1024
+ip ssh version 2
+line console 0
+login local
+password Passw0rd!
+exit
+line vty 0 4
+login local
+transport input ssh
+password Passw0rd!
+exit
+banner motd #Autoriseerimata sisselogimine on keelatud!#
+end
+write memory
+
+SWITCH S2
+
+enable
+configure terminal
+hostname S2
+username admin privilege 15 secret Passw0rd!
+enable secret Passw0rd!
+ip domain-name cisco.local
+crypto key generate rsa
+1024
+ip ssh version 2
+line console 0
+login local
+password Passw0rd!
+exit
+line vty 0 4
+login local
+transport input ssh
+password Passw0rd!
+exit
+banner motd #Autoriseerimata sisselogimine on keelatud!#
+end
+write memory

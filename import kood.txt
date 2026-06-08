@@ -1,0 +1,19 @@
+Import-Module ActiveDirectory
+$domain = (Get-ADDomain).DistinguishedName
+$pass = ConvertTo-SecureString "Passw0rd" -AsPlainText -Force
+
+$fail = ".\kasutaja.csv";
+
+Import-Csv $fail -Delimiter "," -Encoding UTF8 | ForEach-Object {
+    $ou = "OU=$($_.Osakond),OU=Kasutajad,$domain"
+   
+
+    if (-not (Get-ADOrganizationalUnit -Filter "DistinguishedName -eq '$ou'")) {
+        New-ADOrganizationalUnit -Name $_.Osakond -Path "OU=Kasutajad,$domain"
+    }
+   
+    $username = $_.Nimi.ToLower().Replace(" ","").Replace("-","")
+   
+    New-ADUser -SamAccountName $username -Name $_.Nimi -Path $ou -AccountPassword $pass -Enabled $true
+    Write-Host "Loodi kasutaja: $username OU-sse $($_.Osakond)" -ForegroundColor Green
+}
